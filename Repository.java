@@ -1,11 +1,8 @@
 	public class Repository {  
-	//static String greet1 = "Welcome to Aldo's Bazaar! "; //Please enter your name:--Scan next line in sUI\\
-	//static String greet2 = "Type the phrase 'checkout' into the console to exit this program and review final balance.";
-	//static String prompt1 = "Pick an aisle number, then pick a product and quantity to update your cart.";
 	public static Store getStore() {
 		return new Store("Aldo's Bizarrely Antiquated Digital Bazaar", listOfAisles());
+		
 	}
-
 	private static Aisle[] listOfAisles() {
 		Aisle aisle1 = new Aisle("1", "Unused Game Accesories", getListOfProducts("1"));
 		Aisle aisle2 = new Aisle("2", "Trashy Dungeon Treasure", getListOfProducts("2"));

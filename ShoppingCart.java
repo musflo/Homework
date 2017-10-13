@@ -22,6 +22,6 @@ public float balanceDue() {
 	for (int i = 0; i < numberOfProducts; i++) {
 		balanceDue += this.Products[i].price() * this.Products[i].quantity();
 		}
-		return balanceDue;
+		return 0;
 		}
 }

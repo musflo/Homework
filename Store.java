@@ -15,4 +15,5 @@ public class Store {
 	public Aisle[] Aisles() {
 		return this.Aisles;
 	}
+
 }

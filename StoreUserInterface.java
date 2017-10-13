@@ -5,16 +5,18 @@
 			Store myStore = Repository.getStore();
 			ShoppingCart myCart = new ShoppingCart();
 			System.out.println("Welcome to " + myStore.storeName());
-			System.out.println("Below you will find a list of the aisles and your current balance.");
+			System.out.println("Below you will find a list of the aisles contained within these virtual confines.");
+			System.out.println("Select one and I will show you the wares you can find in that aisle.");
+			System.out.println("You also have been cursed to forever browse my wares until you type the phrase 'Leave me alone' into the console");
 			boolean keepGoing = true;
 			while (keepGoing) {
 				displayListOfAisles(myStore.Aisles());
-				System.out.println("You're balance is $" + myCart.balanceDue());
-				ask("Select an aisle or type 'checkout' to exit and view ");
+				System.out.println("You're balance is " + myCart.balanceDue());
+				System.out.println("You are affected with a magic curse, you must select an aisle number to peruse or enter the correct phrase to break the curse");
 				String choice = scan.nextLine();
-				if (choice.equals("checkout")) {
+				if (choice.equals("Leave me alone")) {
 				keepGoing = false;
-				System.out.println("Thank you for shopping. Your final balance is $" + myCart.balanceDue());
+				System.out.println("You have defeated me, enjoy your freedom...");
 				} else {
 					int aisleNumber = Integer.parseInt(choice) - 1;
 					if (aisleNumber >= 0 && aisleNumber <= myStore.Aisles().length -1) {
@@ -33,7 +35,7 @@
 				}
 			}
 			scan.close();
-			
+			System.out.println("Thank you for shopping. Your balance is " + myCart.balanceDue());
 		}
 		private static void displayListOfAisles(Aisle[] aisles) {
 			System.out.println("");
@@ -41,27 +43,27 @@
 				System.out.print("Aisle " + (i + 1) + " - ");
 				System.out.println(aisles[i].aisleDescription());
 			}
-			System.out.println();
 		}
 		private static String ask(String prompt) {
+			Scanner Scan = new Scanner(System.in);
 			System.out.println(prompt);
-			return prompt;
+			String choice = scan.nextLine();
+			return choice;
 					
-			//scan.close();
+			scan.close();
 		
 		}
 		
 		private static void displayListOfProducts(Product[] getListOfProducts) {
 			System.out.println("SKU\tDescription\tPrice");
 			System.out.println("----\t-----------\t-----");
-			int i = 1;
 			for (Product item : getListOfProducts) {
-			System.out.print(item.SKU() + i + "\t");
+			System.out.print(item.SKU() + 1 + "\t");
 			System.out.print(item.description() + "\t");
 			System.out.print("$" + item.price() + "\t" + "\n");
-			i++;
 		}
 	}
 
 	
 }
+

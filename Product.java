@@ -4,7 +4,7 @@ public class Product {
 	private float price;
 	private int quantity;
 	public Product (String SKU, String description, float price, int quantity) {
-		this.SKU = "000";
+		this.SKU = "00";
 		this.description = description;
 		this.price = price;
 		this.quantity = quantity;
