@@ -1,6 +1,10 @@
 	import java.util.Scanner;
+	import java.text.NumberFormat;
+	
 	public class StoreUserInterface {
 		private static Scanner scan = new Scanner(System.in);
+		private static NumberFormat formatter = NumberFormat.getCurrencyInstance();
+		
 		public static void main(String[] args) {
 			Store myStore = Repository.getStore();
 			ShoppingCart myCart = new ShoppingCart();
@@ -13,24 +17,29 @@
 				String choice = ask("Select an aisle or type 'checkout' to exit and view ");
 				if (choice.equals("checkout")) {
 				keepGoing = false;
-				System.out.println("Thank you for shopping. Your final balance is $" + myCart.balanceDue());
 				} else {
-					int aisleNumber = Integer.parseInt(choice) - 1;
+					displayAndSelectProduct(myStore, choice, myCart);
+				}
+			}
+			System.out.println("Your final balance is " + formatter.format(myCart.balanceDue()));
+			System.out.println("Thank you for shopping " + customerName + ", please come back.");
+			scan.close();
+		}
+		private static void displayAndSelectProduct(Store myStore, String aisleChoice, ShoppingCart myCart) {
+					int aisleNumber = Integer.parseInt(aisleChoice) - 1;
 					if (aisleNumber >= 0 && aisleNumber <= myStore.Aisles().length -1) {
 						Aisle chosenAisle = myStore.Aisles()[aisleNumber];
 						displayListOfProducts(chosenAisle.Products());
-						String productChoice = ask("Please pick a product:");
-						int productNumber = Integer.parseInt(productChoice);
-						if (productNumber >= 0 && productNumber <= chosenAisle.Products().length) {
-							System.out.println("How many would you like to buy?");
-							String quantityChoice = scan.nextLine();
-							int qty = Integer.parseInt(quantityChoice);
-							myCart.addProduct(chosenAisle.Products()[productNumber], qty);
+						int productNumber = askForInt("Please pick something already:") - 1;
+						if (productNumber >= 0 && productNumber <= chosenAisle.Products().length - 1) {
+							int qty = askForInt("How many do you wish to buy?");
+							if (myCart.addProduct(chosenAisle.Products()[productNumber], qty)) {
+								System.out.println(qty + " of '" + chosenAisle.Products()[productNumber].description() + "' added to your cart.");
+							} else {
+								System.out.println("Sorry... We don't have that many of '" + chosenAisle.Products()[productNumber].description() + "'");
+							}
 						}
 					}
-				}
-			}
-			scan.close();
 			
 		}
 		private static void displayListOfAisles(Aisle[] aisles) {
@@ -46,18 +55,48 @@
 			String choice = scan.nextLine();
 			return choice;
 		}
-		
-		private static void displayListOfProducts(Product[] getListOfProducts) {
-			System.out.println("SKU\tDescription\tPrice");
-			System.out.println("----\t-----------\t-----");
-			int i = 1;
-			for (Product item : getListOfProducts) {
-			System.out.print(item.SKU() + i + "\t");
-			System.out.print(item.description() + "\t");
-			System.out.print("$" + item.price() + "\t" + "\n");
-			i++;
+		private static int askForInt(String prompt) {
+			return Integer.parseInt(ask(prompt));
 		}
-	}
+		private static void displayListOfProducts(Product[] listOfProducts) {
+			System.out.print(rightPad("Option", 6) + "\t");
+			System.out.print(rightPad("SKU", 12) + "\t");
+			System.out.print(rightPad("Description", 15) + "\t");
+			System.out.print(rightPad("Price", 12) + "\t");
+			System.out.println(rightPad("Qty", 5) + "\t");
+
+			System.out.print(rightPad("", 6, "-") + "\t");
+			System.out.print(rightPad("", 12, "-") + "\t");
+			System.out.print(rightPad("", 15, "-") + "\t");
+			System.out.print(rightPad("", 12, "-") + "\t");
+			System.out.println(rightPad("", 5, "-") + "\t");
+			int i = 1;
+			for (Product product : listOfProducts) {
+				System.out.print(i + "\t");
+				System.out.print(rightPad(product.SKU(), 12) + "\t");
+				System.out.print(rightPad(product.description(), 15) + "\t");
+				System.out.print(rightPad(formatter.format(product.price()),12) + "\t");
+				System.out.println(rightPad(product.quantity(),5));
+				i++;
+			}
+		}
+
+		public static String rightPad(String phrase, int finalLength) {
+			return rightPad(phrase, finalLength, " ");
+		}
+
+		public static String rightPad(int number, int finalLength) {
+			return rightPad(Integer.toString(number), finalLength);
+		}
+
+		public static String rightPad(String phrase, int finalLength, String padCharacter) {
+			if (phrase.length() >= finalLength) 
+				return phrase.substring(0, finalLength);
+			String spaces = "";
+			for (int i = 0; i < finalLength - phrase.length(); i++)
+				spaces += padCharacter;
+			return phrase + spaces;
+		}
 
 	
 }

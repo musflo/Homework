@@ -12,9 +12,13 @@ public Product[] Products() {
 	return this.Products;
 }
 
-public void addProduct(Product product, int quantity) {
-	this.Products[numberOfProducts] = product.clone(quantity);
-	numberOfProducts++;
+public boolean addProduct(Product product, int quantity) {
+	if (product.removeQuantity(quantity)) {
+		this.Products[numberOfProducts] = product.clone(quantity);
+		numberOfProducts++;
+		return true;
+	}
+	return false;
 }
 
 public float balanceDue() {
